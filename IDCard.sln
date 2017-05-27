@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCard.Reader", "src\IDCard.Reader\IDCard.Reader.csproj", "{DD2600E5-815A-4C98-8840-566F59122D49}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reader", "Reader", "{21A3BC6B-6345-4A88-91F8-72268ED7E771}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCard.Reader.Synjones", "src\IDCard.Reader.Synjones\IDCard.Reader.Synjones.csproj", "{144B19D5-9836-48EA-88C7-04C78AFEA636}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCard.Reader", "src\Reader\IDCard.Reader\IDCard.Reader.csproj", "{DD2600E5-815A-4C98-8840-566F59122D49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCard.Reader.Standard", "src\IDCard.Reader.Standard\IDCard.Reader.Standard.csproj", "{33C5E938-52C0-4F06-BBA3-34C2294001FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCard.Reader.Standard", "src\Reader\IDCard.Reader.Standard\IDCard.Reader.Standard.csproj", "{33C5E938-52C0-4F06-BBA3-34C2294001FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCard.Reader.Synjones", "src\Reader\IDCard.Reader.Synjones\IDCard.Reader.Synjones.csproj", "{144B19D5-9836-48EA-88C7-04C78AFEA636}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +21,21 @@ Global
 		{DD2600E5-815A-4C98-8840-566F59122D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD2600E5-815A-4C98-8840-566F59122D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD2600E5-815A-4C98-8840-566F59122D49}.Release|Any CPU.Build.0 = Release|Any CPU
-		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Release|Any CPU.Build.0 = Release|Any CPU
 		{33C5E938-52C0-4F06-BBA3-34C2294001FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{33C5E938-52C0-4F06-BBA3-34C2294001FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33C5E938-52C0-4F06-BBA3-34C2294001FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33C5E938-52C0-4F06-BBA3-34C2294001FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144B19D5-9836-48EA-88C7-04C78AFEA636}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DD2600E5-815A-4C98-8840-566F59122D49} = {21A3BC6B-6345-4A88-91F8-72268ED7E771}
+		{33C5E938-52C0-4F06-BBA3-34C2294001FF} = {21A3BC6B-6345-4A88-91F8-72268ED7E771}
+		{144B19D5-9836-48EA-88C7-04C78AFEA636} = {21A3BC6B-6345-4A88-91F8-72268ED7E771}
 	EndGlobalSection
 EndGlobal
