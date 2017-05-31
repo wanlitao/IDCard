@@ -39,8 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Results\StandardIDCardActionResult.cs" />
     <Compile Include="StandardIDCardInterop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IDCard.Reader\IDCard.Reader.csproj">
+      <Project>{dd2600e5-815a-4c98-8840-566f59122d49}</Project>
+      <Name>IDCard.Reader</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,14 +12,14 @@ namespace IDCard.Reader.Synjones
         /// 自动寻找读卡器
         /// </summary>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_FindReader")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_FindReader", CharSet = CharSet.Ansi)]
         public static extern int FindReader();
 
         /// <summary>
         /// 自动寻找USB读卡器
         /// </summary>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_FindUSBReader")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_FindUSBReader", CharSet = CharSet.Ansi)]
         internal static extern int FindUSBReader();
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="iPort">端口号</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_OpenPort")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_OpenPort", CharSet = CharSet.Ansi)]
         internal static extern int OpenPort(int iPort);
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="iPort">端口号</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ClosePort")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ClosePort", CharSet = CharSet.Ansi)]
         internal static extern int ClosePort(int iPort);
         #endregion
 
@@ -47,7 +47,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="pucIIN">读到的IIN</param>
         /// <param name="iIfOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_StartFindIDCard")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_StartFindIDCard", CharSet = CharSet.Ansi)]
         internal static extern int StartFindIDCard(int iPort, [In, Out] byte[] pucIIN, int iIfOpen);
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="pucSN">读到的SN/param>
         /// <param name="iIfOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SelectIDCard")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SelectIDCard", CharSet = CharSet.Ansi)]
         internal static extern int SelectIDCard(int iPort, [In, Out] byte[] pucSN, int iIfOpen);
         #endregion
 
@@ -72,7 +72,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="puiPHMsgLen">读到的照片信息长度</param>
         /// <param name="iIfOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadBaseMsg")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadBaseMsg", CharSet = CharSet.Ansi)]
         internal static extern int ReadBaseMsg(int iPort, [In, Out] byte[] pucCHMsg, ref uint puiCHMsgLen, [In, Out] byte[] pucPHMsg, ref uint puiPHMsgLen, int iIfOpen);
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="puiPHMsgFileLen">存储照片信息的文件的长度</param>
         /// <param name="iIfOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadBaseMsgToFile")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadBaseMsgToFile", CharSet = CharSet.Ansi)]
         internal static extern int ReadBaseMsgToFile(int iPort, string pcCHMsgFileName, ref uint puiCHMsgFileLen, string pcPHMsgFileName, ref uint puiPHMsgFileLen, int iIfOpen);
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="puiAppMsgLen">读到的追加地址信息长度，最长70字节</param>
         /// <param name="iIfOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadNewAppMsg")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadNewAppMsg", CharSet = CharSet.Ansi)]
         internal static extern int ReadNewAppMsg(int iPort, [In, Out] byte[] pucAppMsg, ref uint puiAppMsgLen, int iIfOpen);
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="Wlt_File">wlt文件名</param>
         /// <param name="intf">阅读设备通讯接口类型（1—RS-232C，2—USB）</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_GetBmp")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_GetBmp", CharSet = CharSet.Ansi)]
         internal static extern int GetBmp(string Wlt_File, int intf);
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="iIfOpen">是否在函数内部打开和关闭端口</param>
         /// <param name="pIDCardData">身份证信息结构体</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadMsg")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_ReadMsg", CharSet = CharSet.Ansi)]
         internal static extern int ReadMsg(int iPort, int iIfOpen, ref SynjonesIDCardData pIDCardData);
         #endregion
 
@@ -126,7 +126,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="iOption">0=C:根目录，1=当前路径，2=指定路径</param>
         /// <param name="cPhotoPath">路径名</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetPhotoPath")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetPhotoPath", CharSet = CharSet.Ansi)]
         internal static extern int SetPhotoPath(int iOption, string cPhotoPath);
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="iType">0=bmp，1=jpeg，2=base64，3=WLT，4=不生成图片</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetPhotoType")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetPhotoType", CharSet = CharSet.Ansi)]
         internal static extern int SetPhotoType(int iType);
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="iType">0=tmp，1=姓名，2=身份证号，3=姓名_身份证号，4=指定文件名（不包括后缀）</param>
         /// <param name="cPhotoname">指定的图片文件名，不包括后缀</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetPhotoNameEx")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetPhotoNameEx", CharSet = CharSet.Ansi)]
         internal static extern int SetPhotoName(int iType, string cPhotoname);
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="iType">0=卡内存储的数据，1=解释之后的数据</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetSexType")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetSexType", CharSet = CharSet.Ansi)]
         internal static extern int SetSexType(int iType);
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="iType">0=卡内存储的数据，1=解释之后的数据，2=解释之后+“族”</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetNationType")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetNationType", CharSet = CharSet.Ansi)]
         internal static extern int SetNationType(int iType);
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="iType">0=YYYYMMDD,1=YYYY年MM月DD日,2=YYYY.MM.DD,3=YYYY-MM-DD,4=YYYY/MM/DD</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetBornType")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetBornType", CharSet = CharSet.Ansi)]
         internal static extern int SetBornType(int iType);
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="iType">0=YYYYMMDD,1=YYYY年MM月DD日,2=YYYY.MM.DD,3=YYYY-MM-DD,4=YYYY/MM/DD</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetUserLifeBType")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetUserLifeBType", CharSet = CharSet.Ansi)]
         internal static extern int SetUserLifeBType(int iType);
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace IDCard.Reader.Synjones
         /// <param name="iType">0=YYYYMMDD,1=YYYY年MM月DD日,2=YYYY.MM.DD,3=YYYY-MM-DD,4=YYYY/MM/DD</param>
         /// <param name="iOption">0=长期不转换 1=长期转换为 有效期开始加50年</param>
         /// <returns></returns>
-        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetUserLifeEType")]
+        [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_SetUserLifeEType", CharSet = CharSet.Ansi)]
         internal static extern int SetUserLifeEType(int iType, int iOption);
         #endregion
     }
@@ -197,7 +197,7 @@ namespace IDCard.Reader.Synjones
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 6)]
         internal string Sex;   //性别
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
-        internal string Nation; //名族
+        internal string Nation; //民族
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 18)]
         internal string Born; //出生日期
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 72)]

@@ -1,8 +1,11 @@
 ﻿namespace IDCard.Reader
 {
-    public class IDCardActionResult
+    /// <summary>
+    /// 身份证操作结果
+    /// </summary>
+    public abstract class IDCardActionResult
     {
-        public bool flag { get { return code == 1; } }
+        public abstract bool flag { get; }
 
         public int code { get; set; }
 
@@ -12,7 +15,7 @@
         public string msg { get; set; }
     }
 
-    public class IDCardActionResult<T>
+    public abstract class IDCardActionResult<T> : IDCardActionResult
     {
         public T data { get; set; }
     }

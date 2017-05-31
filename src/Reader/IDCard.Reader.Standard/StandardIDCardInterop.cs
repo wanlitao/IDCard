@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace IDCard.Reader
+namespace IDCard.Reader.Standard
 {
     /// <summary>
     /// 身份证交互接口（公安部一所）
@@ -52,5 +52,13 @@ namespace IDCard.Reader
         /// <returns></returns>
         [DllImport("termb.dll", EntryPoint = "Read_Content_Path")]
         internal static extern int Read_Content_Path(string cPath, int active);
+
+        /// <summary>
+        /// 获取BMP照片
+        /// </summary>
+        /// <param name="wlt_File">wlt文件名（含路径）</param>
+        /// <returns></returns>
+        [DllImport("termb.dll", EntryPoint = "GetPhoto")]
+        internal static extern int GetPhoto(string wlt_File);
     }
 }
