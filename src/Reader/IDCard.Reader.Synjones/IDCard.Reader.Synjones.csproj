@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\SynjonesIDCardActionResult.cs" />
-    <Compile Include="SynjonesIDCardInterop.cs" />
+    <Compile Include="Interop\SynjonesIDCardInterop.cs" />
     <Compile Include="SynjonesIDCardReader.cs" />
   </ItemGroup>
   <ItemGroup>

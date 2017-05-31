@@ -40,8 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Results\StandardIDCardActionResult.cs" />
-    <Compile Include="StandardIDCardInterop.cs" />
+    <Compile Include="Interop\StandardIDCardInterop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StandardIDCardReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IDCard.Reader\IDCard.Reader.csproj">

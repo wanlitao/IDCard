@@ -2,6 +2,9 @@
 
 namespace IDCard.Reader
 {
+    /// <summary>
+    /// 身份证阅读接口
+    /// </summary>
     public interface IIDCardReader : IDisposable
     {
         #region 读文字和相片信息

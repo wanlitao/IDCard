@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace IDCard.Reader.Synjones
+namespace IDCard.Reader.Standard
 {
     /// <summary>
-    /// 身份证阅读（新中新）
+    /// 身份证阅读（公安部一所）
     /// </summary>
-    public class SynjonesIDCardReader : IDCardReader
+    public class StandardIDCardReader : IDCardReader
     {
         #region 读文字和相片信息
         /// <summary>
