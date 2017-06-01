@@ -7,6 +7,18 @@ namespace IDCard.Reader.Synjones
     /// </summary>
     public class SynjonesIDCardReader : IDCardReader
     {
+        private SynjonesIDCardReaderOptions _options;
+
+        #region 构造函数
+        public SynjonesIDCardReader(SynjonesIDCardReaderOptions options)
+        {
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            _options = options;
+        }
+        #endregion
+
         #region 读文字和相片信息
         /// <summary>
         /// 读文字和相片信息
