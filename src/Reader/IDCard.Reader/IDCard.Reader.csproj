@@ -52,6 +52,7 @@
     <Compile Include="Models\IDCardInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\IDCardActionResult.cs" />
+    <Compile Include="Results\IDCardActionResultHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

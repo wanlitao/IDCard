@@ -19,6 +19,88 @@ namespace IDCard.Reader.Synjones
         }
         #endregion
 
+        #region Helper Functions
+        /// <summary>
+        /// 是否调用成功
+        /// </summary>
+        /// <param name="retCode"></param>
+        /// <returns></returns>
+        private bool IsRetSuccess(int retCode)
+        {
+            return retCode == 0;
+        }
+
+        /// <summary>
+        /// 获取通讯端口
+        /// </summary>
+        /// <returns></returns>
+        private IDCardActionResult<int> FindCommunicatePort()
+        {
+            if (_options.Port.HasValue)
+                return IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult<int>, int>(0, _options.Port.Value);
+
+            var retPort = SynjonesIDCardInterop.FindReader();
+            var retCode = retPort > 0 ? 0 : -1;
+
+            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult<int>, int>(retCode, retPort)
+                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult<int>>(retCode, "connect reader fail");
+        }
+
+        /// <summary>
+        /// 打开端口
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private IDCardActionResult OpenPort(int port)
+        {
+            var retCode = SynjonesIDCardInterop.OpenPort(port);
+
+            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
+                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "open port fail");
+        }
+
+        /// <summary>
+        /// 关闭端口
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private IDCardActionResult ClosePort(int port)
+        {
+            var retCode = SynjonesIDCardInterop.ClosePort(port);
+
+            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
+                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "invalid port");
+        }
+
+        /// <summary>
+        /// 开始找卡
+        /// </summary>
+        /// <param name="port"></param>        
+        /// <returns></returns>
+        private IDCardActionResult StartFindIDCard(int port)
+        {
+            var pucIIN = new byte[4];
+            var retCode = SynjonesIDCardInterop.StartFindIDCard(port, pucIIN, 0);
+
+            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
+                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "find card fail");
+        }
+
+        /// <summary>
+        /// 选卡
+        /// </summary>
+        /// <param name="port"></param>        
+        /// <returns></returns>
+        private IDCardActionResult SelectIDCard(int port)
+        {
+            var pucSN = new byte[8];
+            var retCode = SynjonesIDCardInterop.SelectIDCard(port, pucSN, 0);
+
+            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
+                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "select card fail");
+        }
+        #endregion
+
         #region 读文字和相片信息
         /// <summary>
         /// 读文字和相片信息

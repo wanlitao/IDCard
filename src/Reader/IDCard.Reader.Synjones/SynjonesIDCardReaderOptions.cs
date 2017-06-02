@@ -15,6 +15,20 @@ namespace IDCard.Reader.Synjones
                 .PhotoName_IDCardNameWithNo();
         }
 
+        #region 端口
+        internal int? Port { get; private set; }
+
+        public SynjonesIDCardReaderOptions CommunicatePort(int port)
+        {
+            if (port < 1 || port > 9999)
+                throw new ArgumentOutOfRangeException(nameof(port), "port must between 1 and 9999");
+
+            Port = port;
+
+            return this;
+        }
+        #endregion
+
         #region 照片路径
         internal SynjonesIDCardPhotoPathType PhotoPathType { get; private set; }
 
