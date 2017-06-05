@@ -51,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\SynjonesIDCardActionResult.cs" />
     <Compile Include="Interop\SynjonesIDCardInterop.cs" />
+    <Compile Include="Results\SynjonesIDCardRetCode.cs" />
     <Compile Include="SynjonesIDCardReader.cs" />
     <Compile Include="SynjonesIDCardReaderOptions.cs" />
   </ItemGroup>

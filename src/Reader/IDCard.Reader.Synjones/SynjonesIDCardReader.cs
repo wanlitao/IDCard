@@ -25,9 +25,19 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="retCode"></param>
         /// <returns></returns>
-        private bool IsRetSuccess(int retCode)
+        private static bool IsRetSuccess(int retCode)
         {
             return retCode == 0;
+        }
+
+        /// <summary>
+        /// 获取ifOpen参数代码值
+        /// </summary>
+        /// <param name="ifOpen"></param>
+        /// <returns></returns>
+        private static int GetIfOpenCode(bool ifOpen)
+        {
+            return ifOpen ? 1 : 0;
         }
 
         /// <summary>
@@ -39,6 +49,17 @@ namespace IDCard.Reader.Synjones
             if (_options.Port.HasValue)
                 return IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult<int>, int>(0, _options.Port.Value);
 
+            return FindReader();
+        }
+        #endregion
+
+        #region Interop Action
+        /// <summary>
+        /// 自动寻找读卡器
+        /// </summary>
+        /// <returns></returns>
+        private static IDCardActionResult<int> FindReader()
+        {
             var retPort = SynjonesIDCardInterop.FindReader();
             var retCode = retPort > 0 ? 0 : -1;
 
@@ -47,16 +68,26 @@ namespace IDCard.Reader.Synjones
         }
 
         /// <summary>
+        /// 执行Interop操作
+        /// </summary>
+        /// <param name="interopFunc"></param>
+        /// <returns></returns>
+        private static IDCardActionResult ExecInteropAction(Func<int> interopFunc)
+        {
+            var retCode = interopFunc();
+
+            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
+                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, SynjonesIDCardRetCode.GetCodeMsg(retCode));
+        }
+
+        /// <summary>
         /// 打开端口
         /// </summary>
         /// <param name="port"></param>
         /// <returns></returns>
-        private IDCardActionResult OpenPort(int port)
+        private static IDCardActionResult OpenPort(int port)
         {
-            var retCode = SynjonesIDCardInterop.OpenPort(port);
-
-            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
-                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "open port fail");
+            return ExecInteropAction(() => SynjonesIDCardInterop.OpenPort(port));
         }
 
         /// <summary>
@@ -64,40 +95,58 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="port"></param>
         /// <returns></returns>
-        private IDCardActionResult ClosePort(int port)
+        private static IDCardActionResult ClosePort(int port)
         {
-            var retCode = SynjonesIDCardInterop.ClosePort(port);
-
-            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
-                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "invalid port");
+            return ExecInteropAction(() => SynjonesIDCardInterop.ClosePort(port));            
         }
 
         /// <summary>
         /// 开始找卡
         /// </summary>
-        /// <param name="port"></param>        
+        /// <param name="port"></param>
+        /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        private IDCardActionResult StartFindIDCard(int port)
+        private static IDCardActionResult StartFindIDCard(int port, bool ifOpen)
         {
-            var pucIIN = new byte[4];
-            var retCode = SynjonesIDCardInterop.StartFindIDCard(port, pucIIN, 0);
-
-            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
-                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "find card fail");
+            return ExecInteropAction(() =>
+            {
+                var pucIIN = new byte[4];
+                return SynjonesIDCardInterop.StartFindIDCard(port, pucIIN, GetIfOpenCode(ifOpen));
+            });
         }
 
         /// <summary>
         /// 选卡
         /// </summary>
-        /// <param name="port"></param>        
+        /// <param name="port"></param>
+        /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        private IDCardActionResult SelectIDCard(int port)
+        private static IDCardActionResult SelectIDCard(int port, bool ifOpen)
         {
-            var pucSN = new byte[8];
-            var retCode = SynjonesIDCardInterop.SelectIDCard(port, pucSN, 0);
+            return ExecInteropAction(() =>
+            {
+                var pucSN = new byte[8];
+                return SynjonesIDCardInterop.SelectIDCard(port, pucSN, GetIfOpenCode(ifOpen));
+            });
+        }
 
-            return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult>(retCode)
-                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult>(retCode, "select card fail");
+        /// <summary>
+        /// 读取基本区域信息到文件
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="txtFileName">文字信息写入文件名</param>
+        /// <param name="photoFileName">照片信息写入文件名</param>
+        /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
+        /// <returns></returns>
+        private IDCardActionResult ReadBaseMsgToFile(int port, string txtFileName, string photoFileName, bool ifOpen)
+        {
+            return ExecInteropAction(() =>
+            {
+                uint txtFileLen = 0;
+                uint photoFileLen = 0;
+                return SynjonesIDCardInterop.ReadBaseMsgToFile(port,
+                    txtFileName, ref txtFileLen, photoFileName, ref photoFileLen, GetIfOpenCode(ifOpen));
+            });
         }
         #endregion
 
