@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace IDCard.Reader.Synjones
 {
@@ -10,6 +11,10 @@ namespace IDCard.Reader.Synjones
         private SynjonesIDCardReaderOptions _options;
 
         #region 构造函数
+        public SynjonesIDCardReader()
+            : this(new SynjonesIDCardReaderOptions())
+        { }
+
         public SynjonesIDCardReader(SynjonesIDCardReaderOptions options)
         {
             if (options == null)
@@ -131,22 +136,89 @@ namespace IDCard.Reader.Synjones
         }
 
         /// <summary>
-        /// 读取基本区域信息到文件
+        /// 读取基本区域信息
         /// </summary>
         /// <param name="port"></param>
-        /// <param name="txtFileName">文字信息写入文件名</param>
-        /// <param name="photoFileName">照片信息写入文件名</param>
         /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
         /// <returns></returns>
-        private IDCardActionResult ReadBaseMsgToFile(int port, string txtFileName, string photoFileName, bool ifOpen)
+        private static IDCardActionResult ReadBaseMsg(int port, bool ifOpen)
         {
             return ExecInteropAction(() =>
             {
+                var txtInfo = new byte[512];
+                uint txtInfoLen = 0;
+                var photoInfo = new byte[4096];
+                uint photoInfoLen = 0;
+                return SynjonesIDCardInterop.ReadBaseMsg(port,
+                    txtInfo, ref txtInfoLen, photoInfo, ref photoInfoLen, GetIfOpenCode(ifOpen));
+            });
+        }
+
+        /// <summary>
+        /// 读取基本区域信息到文件
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="txtFilePath">文字信息写入文件路径</param>
+        /// <param name="photoFilePath">照片信息写入文件路径</param>
+        /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
+        /// <returns></returns>
+        private static IDCardActionResult ReadBaseMsgToFile(int port, string txtFilePath, string photoFilePath, bool ifOpen)
+        {
+            return ExecInteropAction(() =>
+            {                
                 uint txtFileLen = 0;
                 uint photoFileLen = 0;
                 return SynjonesIDCardInterop.ReadBaseMsgToFile(port,
-                    txtFileName, ref txtFileLen, photoFileName, ref photoFileLen, GetIfOpenCode(ifOpen));
+                    txtFilePath, ref txtFileLen, photoFilePath, ref photoFileLen, GetIfOpenCode(ifOpen));
             });
+        }
+
+        /// <summary>
+        /// 读取基本区域信息，并按设置转化文本和照片
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
+        /// <returns></returns>
+        private static IDCardActionResult ReadMsg(int port, bool ifOpen)
+        {
+            return ExecInteropAction(() =>
+            {
+                SynjonesIDCardData idCardData = new SynjonesIDCardData();
+                return SynjonesIDCardInterop.ReadMsg(port, GetIfOpenCode(ifOpen), ref idCardData);
+            });
+        }
+        #endregion
+
+        #region Interop Read Action
+        /// <summary>
+        /// 执行Interop读操作
+        /// </summary>
+        /// <param name="interopReadFunc"></param>
+        /// <returns></returns>
+        private IDCardActionResult ExecInteropReadAction(Func<int, IDCardActionResult> interopReadFunc)
+        {
+            var portResult = FindCommunicatePort();
+            if (!portResult.flag)
+                return portResult;
+
+            var port = portResult.data;
+
+            var result = OpenPort(port);
+            if (!result.flag)
+                return result;
+
+            result = StartFindIDCard(port, false);
+            if (result.flag)
+            {
+                result = SelectIDCard(port, false);
+                if (result.flag)
+                {
+                    result = interopReadFunc(port);
+                }
+            }
+
+            ClosePort(port);
+            return result;
         }
         #endregion
 
@@ -158,7 +230,7 @@ namespace IDCard.Reader.Synjones
         /// <returns></returns>        
         protected override IDCardActionResult ReadBaseTextPhotoInfoInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            return ExecInteropReadAction((port) => ReadBaseMsg(port, false));
         }
         #endregion
 

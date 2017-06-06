@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{33C5E938-52C0-4F06-BBA3-34C2294001FF}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{EC5C0B17-0005-48FA-8D36-576FE9A93793}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IDCard.Reader.Standard</RootNamespace>
-    <AssemblyName>IDCard.Reader.Standard</AssemblyName>
+    <RootNamespace>IDCard.Reader.Test</RootNamespace>
+    <AssemblyName>IDCard.Reader.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -54,17 +56,49 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Results\StandardIDCardActionResult.cs" />
-    <Compile Include="Interop\StandardIDCardInterop.cs" />
+    <Compile Include="SynjonesTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SynjonesTestForm.Designer.cs">
+      <DependentUpon>SynjonesTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StandardIDCardReader.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="SynjonesTestForm.resx">
+      <DependentUpon>SynjonesTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IDCard.Reader.Synjones\IDCard.Reader.Synjones.csproj">
+      <Project>{144b19d5-9836-48ea-88c7-04c78afea636}</Project>
+      <Name>IDCard.Reader.Synjones</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IDCard.Reader\IDCard.Reader.csproj">
-      <Project>{dd2600e5-815a-4c98-8840-566f59122d49}</Project>
+      <Project>{DD2600E5-815A-4C98-8840-566F59122D49}</Project>
       <Name>IDCard.Reader</Name>
     </ProjectReference>
   </ItemGroup>
