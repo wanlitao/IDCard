@@ -26,16 +26,28 @@ namespace IDCard.Reader
         /// <summary>
         /// 解析文字信息
         /// </summary>
-        /// <param name="txtFilePath">文字信息文件路径</param>
         /// <returns></returns>
-        IDCardInfo ParseTextInfo(string txtFilePath);
+        IDCardInfo ParseTextInfo();
+
+        /// <summary>
+        /// 解析文字信息
+        /// </summary>
+        /// <param name="fileDirectory">文字信息所属目录</param>
+        /// <returns></returns>
+        IDCardInfo ParseTextInfo(string fileDirectory);
+
+        /// <summary>
+        /// 解析照片信息
+        /// </summary>        
+        /// <returns>BMP照片路径</returns>
+        IDCardActionResult<string> ParsePhotoInfo();
 
         /// <summary>
         /// 解析照片信息
         /// </summary>
-        /// <param name="wltFilePath">相片文件路径</param>
+        /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        IDCardActionResult<string> ParsePhotoInfo(string wltFilePath);
+        IDCardActionResult<string> ParsePhotoInfo(string fileDirectory);
         #endregion
 
         #region 读最新地址信息

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FCP.Util;
+using System;
 using System.IO;
 
 namespace IDCard.Reader.Synjones
@@ -8,7 +9,9 @@ namespace IDCard.Reader.Synjones
     /// </summary>
     public class SynjonesIDCardReader : IDCardReader
     {
-        private SynjonesIDCardReaderOptions _options;
+        protected const string DefaultCardDataFileName = "idcard.txt";
+
+        private SynjonesIDCardReaderOptions _options;        
 
         #region 构造函数
         public SynjonesIDCardReader()
@@ -55,6 +58,24 @@ namespace IDCard.Reader.Synjones
                 return IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult<int>, int>(0, _options.Port.Value);
 
             return FindReader();
+        }
+
+        /// <summary>
+        /// 写入文件
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <param name="fileData">文件数据</param>
+        private static void WriteToFile<TData>(string filePath, TData fileData)
+        {
+            if (filePath.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(filePath));
+
+            var fileBytes = SerializerFactory.JsonSerializer.Serialize(fileData);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                fileStream.Write(fileBytes, 0, fileBytes.Length);
+            }
         }
         #endregion
 
@@ -140,17 +161,24 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="port"></param>
         /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
+        /// <param name="txtFilePath">文字信息写入文件路径</param>
+        /// <param name="photoFilePath">照片信息写入文件路径</param>
         /// <returns></returns>
-        private static IDCardActionResult ReadBaseMsg(int port, bool ifOpen)
+        private static IDCardActionResult ReadBaseMsg(int port, bool ifOpen, string txtFilePath, string photoFilePath)
         {
             return ExecInteropAction(() =>
             {
-                var txtInfo = new byte[512];
-                uint txtInfoLen = 0;
-                var photoInfo = new byte[4096];
-                uint photoInfoLen = 0;
-                return SynjonesIDCardInterop.ReadBaseMsg(port,
-                    txtInfo, ref txtInfoLen, photoInfo, ref photoInfoLen, GetIfOpenCode(ifOpen));
+                var txtBytes = new byte[512];
+                uint txtByteLen = 0;
+                var photoBytes = new byte[4096];
+                uint photoByteLen = 0;
+                var retCode = SynjonesIDCardInterop.ReadBaseMsg(port,
+                    txtBytes, ref txtByteLen, photoBytes, ref photoByteLen, GetIfOpenCode(ifOpen));
+
+                WriteToFile(txtFilePath, txtBytes, (int)txtByteLen);
+                WriteToFile(photoFilePath, photoBytes, (int)photoByteLen);
+
+                return retCode;
             });
         }
 
@@ -178,13 +206,19 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="port"></param>
         /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
+        /// <param name="cardDataFilePath">身份证数据写入文件路径</param>
         /// <returns></returns>
-        private static IDCardActionResult ReadMsg(int port, bool ifOpen)
+        [Obsolete("as this method often lead to crash, please use ReadBaseMsg instead.", true)]
+        private static IDCardActionResult ReadMsg(int port, bool ifOpen, string cardDataFilePath)
         {
             return ExecInteropAction(() =>
             {
                 SynjonesIDCardData idCardData = new SynjonesIDCardData();
-                return SynjonesIDCardInterop.ReadMsg(port, GetIfOpenCode(ifOpen), ref idCardData);
+                var retCode = SynjonesIDCardInterop.ReadMsg(port, GetIfOpenCode(ifOpen), ref idCardData);
+
+                WriteToFile(cardDataFilePath, idCardData);
+
+                return retCode;
             });
         }
         #endregion
@@ -230,7 +264,10 @@ namespace IDCard.Reader.Synjones
         /// <returns></returns>        
         protected override IDCardActionResult ReadBaseTextPhotoInfoInternal(string fileDirectory)
         {
-            return ExecInteropReadAction((port) => ReadBaseMsg(port, false));
+            var txtFilePath = GetFilePath(fileDirectory, DefaultTextFileName);
+            var photoFilePath = GetFilePath(fileDirectory, DefaultPhotoFileName);
+
+            return ExecInteropReadAction((port) => ReadBaseMsg(port, false, txtFilePath, photoFilePath));
         }
         #endregion
 
@@ -238,20 +275,25 @@ namespace IDCard.Reader.Synjones
         /// <summary>
         /// 解析文字信息
         /// </summary>
-        /// <param name="textFileBytes">文字信息文件字节数组</param>
-        /// <returns></returns>        
-        protected override IDCardInfo ParseTextInfoInternal(byte[] textFileBytes)
+        /// <param name="fileDirectory">文字信息所属目录</param>
+        /// <returns></returns>
+        protected override IDCardInfo ParseTextInfoInternal(string fileDirectory)
         {
+            var txtFilePath = GetFilePath(fileDirectory, DefaultTextFileName);
+            var fileBytes = ReadFileContent(txtFilePath);
+
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// 解析照片信息
         /// </summary>
-        /// <param name="wltFilePath">相片文件路径</param>
+        /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        protected override IDCardActionResult<string> ParsePhotoInfoInternal(string wltFilePath)
+        protected override IDCardActionResult<string> ParsePhotoInfoInternal(string fileDirectory)
         {
+            var photoFilePath = GetFilePath(fileDirectory, DefaultPhotoFileName);
+
             throw new NotImplementedException();
         }
         #endregion

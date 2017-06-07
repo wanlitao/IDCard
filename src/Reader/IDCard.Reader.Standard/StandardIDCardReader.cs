@@ -23,9 +23,9 @@ namespace IDCard.Reader.Standard
         /// <summary>
         /// 解析文字信息
         /// </summary>
-        /// <param name="textFileBytes">文字信息文件字节数组</param>
-        /// <returns></returns>        
-        protected override IDCardInfo ParseTextInfoInternal(byte[] textFileBytes)
+        /// <param name="fileDirectory">文字信息所属目录</param>
+        /// <returns></returns>
+        protected override IDCardInfo ParseTextInfoInternal(string fileDirectory)
         {
             throw new NotImplementedException();
         }
@@ -33,9 +33,9 @@ namespace IDCard.Reader.Standard
         /// <summary>
         /// 解析照片信息
         /// </summary>
-        /// <param name="wltFilePath">相片文件路径</param>
+        /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        protected override IDCardActionResult<string> ParsePhotoInfoInternal(string wltFilePath)
+        protected override IDCardActionResult<string> ParsePhotoInfoInternal(string fileDirectory)
         {
             throw new NotImplementedException();
         }

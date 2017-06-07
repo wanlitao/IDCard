@@ -6,8 +6,8 @@ namespace IDCard.Reader
 {
     public abstract class IDCardReader : IIDCardReader
     {
-        protected const string TextFileName = "wz.txt";
-        protected const string PhotoFileName = "xp.wlt";
+        protected const string DefaultTextFileName = "wz.txt";
+        protected const string DefaultPhotoFileName = "xp.wlt";
 
         protected static string AppDomainBaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -29,6 +29,43 @@ namespace IDCard.Reader
 
                 return fileBytes;
             }
+        }
+
+        /// <summary>
+        /// 写入文件
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <param name="fileBytes">写入字节</param>
+        /// <param name="byteLength">字节数</param>
+        protected static void WriteToFile(string filePath, byte[] fileBytes, int byteLength)
+        {
+            if (filePath.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(filePath));
+
+            if (fileBytes.isEmpty())
+                throw new ArgumentNullException(nameof(fileBytes));
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                fileStream.Write(fileBytes, 0, byteLength);
+            }
+        }
+
+        /// <summary>
+        /// 获取文件路径
+        /// </summary>
+        /// <param name="directoryPath">目录路径</param>
+        /// <param name="fileName">文件名</param>
+        /// <returns></returns>
+        protected static string GetFilePath(string directoryPath, string fileName)
+        {
+            if (directoryPath.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(directoryPath));
+
+            if (fileName.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(fileName));
+
+            return Path.Combine(directoryPath, fileName);
         }
         #endregion
 
@@ -68,48 +105,65 @@ namespace IDCard.Reader
         #region 内容解析
         /// <summary>
         /// 解析文字信息
-        /// </summary>
-        /// <param name="txtFilePath">文字信息文件路径</param>
+        /// </summary>       
         /// <returns></returns>
-        public virtual IDCardInfo ParseTextInfo(string txtFilePath)
+        public IDCardInfo ParseTextInfo()
         {
-            if (txtFilePath.isNullOrEmpty())
-                throw new ArgumentNullException(txtFilePath);
-
-            CheckDisposed();
-
-            var txtFileBytes = ReadFileContent(txtFilePath);
-            return ParseTextInfoInternal(txtFileBytes);
+            return ParseTextInfo(AppDomainBaseDirectory);
         }
 
         /// <summary>
         /// 解析文字信息
         /// </summary>
-        /// <param name="textFileBytes">文字信息文件字节数组</param>
+        /// <param name="fileDirectory">文字信息所属目录</param>
         /// <returns></returns>
-        protected abstract IDCardInfo ParseTextInfoInternal(byte[] textFileBytes);
+        public virtual IDCardInfo ParseTextInfo(string fileDirectory)
+        {
+            if (fileDirectory.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(fileDirectory));
+
+            CheckDisposed();
+            
+            return ParseTextInfoInternal(fileDirectory);
+        }
+
+        /// <summary>
+        /// 解析文字信息
+        /// </summary>
+        /// <param name="fileDirectory">文字信息所属目录</param>
+        /// <returns></returns>
+        protected abstract IDCardInfo ParseTextInfoInternal(string fileDirectory);
 
         /// <summary>
         /// 解析照片信息
-        /// </summary>
-        /// <param name="wltFilePath">相片文件路径</param>
+        /// </summary>        
         /// <returns>BMP照片路径</returns>
-        public virtual IDCardActionResult<string> ParsePhotoInfo(string wltFilePath)
+        public IDCardActionResult<string> ParsePhotoInfo()
         {
-            if (wltFilePath.isNullOrEmpty())
-                throw new ArgumentNullException(wltFilePath);
-
-            CheckDisposed();
-
-            return ParsePhotoInfoInternal(wltFilePath);
+            return ParsePhotoInfo(AppDomainBaseDirectory);
         }
 
         /// <summary>
         /// 解析照片信息
         /// </summary>
-        /// <param name="wltFilePath">相片文件路径</param>
+        /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        protected abstract IDCardActionResult<string> ParsePhotoInfoInternal(string wltFilePath);
+        public virtual IDCardActionResult<string> ParsePhotoInfo(string fileDirectory)
+        {
+            if (fileDirectory.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(fileDirectory));
+
+            CheckDisposed();
+
+            return ParsePhotoInfoInternal(fileDirectory);
+        }
+
+        /// <summary>
+        /// 解析照片信息
+        /// </summary>
+        /// <param name="fileDirectory">照片信息所属目录</param>
+        /// <returns>BMP照片路径</returns>
+        protected abstract IDCardActionResult<string> ParsePhotoInfoInternal(string fileDirectory);
         #endregion
 
         #region 读最新地址信息
