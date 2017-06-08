@@ -35,7 +35,7 @@ namespace IDCard.Reader.Standard
         /// </summary>
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        protected override IDCardActionResult<string> ParsePhotoInfoInternal(string fileDirectory)
+        protected override IDCardActionResult ParsePhotoInfoInternal(string fileDirectory)
         {
             throw new NotImplementedException();
         }

@@ -25,7 +25,7 @@ namespace IDCard.Reader
         /// <summary>
         /// 出生日期
         /// </summary>
-        public int Birthday { get; set; }
+        public string Birthday { get; set; }
         
         /// <summary>
         /// 住址
@@ -45,7 +45,7 @@ namespace IDCard.Reader
         /// <summary>
         /// 有效起始日期
         /// </summary>
-        public int ValidBeginDate { get; set; }
+        public string ValidBeginDate { get; set; }
 
         /// <summary>
         /// 有效截止日期

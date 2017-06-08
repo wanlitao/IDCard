@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using FCP.Util;
+using System.Text;
 
 namespace IDCard.Reader
 {
@@ -66,6 +67,50 @@ namespace IDCard.Reader
                 throw new ArgumentNullException(nameof(fileName));
 
             return Path.Combine(directoryPath, fileName);
+        }
+
+        /// <summary>
+        /// 解析身份证文本字节
+        /// </summary>
+        /// <param name="idCardTextBytes"></param>
+        /// <returns></returns>
+        protected static IDCardData ParseIDCardTextBytes(byte[] idCardTextBytes)
+        {
+            if (idCardTextBytes.isEmpty())
+                throw new ArgumentNullException(nameof(idCardTextBytes));
+
+            if (idCardTextBytes.Length < 256)
+                throw new ArgumentException("invalid idcard text bytes", nameof(idCardTextBytes));
+
+            var cardData = new IDCardData();
+
+            cardData.Name = ConvertIDCardBytesToUTF8String(idCardTextBytes, 0, 30).Trim();
+            cardData.Sex = TypeHelper.parseInt(ConvertIDCardBytesToUTF8String(idCardTextBytes, 30, 2));
+            cardData.Nation = TypeHelper.parseInt(ConvertIDCardBytesToUTF8String(idCardTextBytes, 32, 4));
+            cardData.Birthday = ConvertIDCardBytesToUTF8String(idCardTextBytes, 36, 16).Trim();
+            cardData.Address = ConvertIDCardBytesToUTF8String(idCardTextBytes, 52, 70).Trim();
+            cardData.IDCardNo = ConvertIDCardBytesToUTF8String(idCardTextBytes, 122, 36).Trim();
+            cardData.IssuingAuthority = ConvertIDCardBytesToUTF8String(idCardTextBytes, 158, 30).Trim();
+            cardData.ValidBeginDate = ConvertIDCardBytesToUTF8String(idCardTextBytes, 188, 16).Trim();
+            cardData.ValidEndDate = ConvertIDCardBytesToUTF8String(idCardTextBytes, 204, 16).Trim();
+
+            return cardData;
+        }
+
+        /// <summary>
+        /// 将身份证文本字节转换为UTF8字符串
+        /// </summary>
+        /// <param name="idCardTextBytes"></param>
+        /// <param name="index">起始位置</param>
+        /// <param name="count">数量</param>
+        /// <returns></returns>
+        protected static string ConvertIDCardBytesToUTF8String(byte[] idCardTextBytes, int index, int count)
+        {
+            if (idCardTextBytes.isEmpty())
+                throw new ArgumentNullException(nameof(idCardTextBytes));
+
+            byte[] utf8Bytes = Encoding.Convert(Encoding.GetEncoding("UCS-2"), Encoding.UTF8, idCardTextBytes, index, count);
+            return Encoding.UTF8.GetString(utf8Bytes);
         }
         #endregion
 
@@ -138,7 +183,7 @@ namespace IDCard.Reader
         /// 解析照片信息
         /// </summary>        
         /// <returns>BMP照片路径</returns>
-        public IDCardActionResult<string> ParsePhotoInfo()
+        public IDCardActionResult ParsePhotoInfo()
         {
             return ParsePhotoInfo(AppDomainBaseDirectory);
         }
@@ -148,7 +193,7 @@ namespace IDCard.Reader
         /// </summary>
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        public virtual IDCardActionResult<string> ParsePhotoInfo(string fileDirectory)
+        public virtual IDCardActionResult ParsePhotoInfo(string fileDirectory)
         {
             if (fileDirectory.isNullOrEmpty())
                 throw new ArgumentNullException(nameof(fileDirectory));
@@ -163,7 +208,7 @@ namespace IDCard.Reader
         /// </summary>
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        protected abstract IDCardActionResult<string> ParsePhotoInfoInternal(string fileDirectory);
+        protected abstract IDCardActionResult ParsePhotoInfoInternal(string fileDirectory);
         #endregion
 
         #region 读最新地址信息

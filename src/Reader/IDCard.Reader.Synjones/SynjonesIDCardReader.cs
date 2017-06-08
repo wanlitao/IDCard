@@ -1,6 +1,7 @@
 ﻿using FCP.Util;
 using System;
 using System.IO;
+using System.Text;
 
 namespace IDCard.Reader.Synjones
 {
@@ -61,6 +62,21 @@ namespace IDCard.Reader.Synjones
         }
 
         /// <summary>
+        /// 获取通讯类型
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private static int GetCommunicateType(int port)
+        {
+            if (port < 1)
+                throw new ArgumentException("invalid port", nameof(port));
+
+            var communicateType = port > 1000 ? SynjonesIDCardCommunicateType.USB : SynjonesIDCardCommunicateType.RS232C;
+
+            return (int)communicateType;
+        }
+
+        /// <summary>
         /// 写入文件
         /// </summary>
         /// <param name="filePath">文件路径</param>
@@ -87,7 +103,7 @@ namespace IDCard.Reader.Synjones
         private static IDCardActionResult<int> FindReader()
         {
             var retPort = SynjonesIDCardInterop.FindReader();
-            var retCode = retPort > 0 ? 0 : -1;
+            var retCode = retPort > 0 ? 0 : -99;
 
             return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult<int>, int>(retCode, retPort)
                 : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult<int>>(retCode, "connect reader fail");
@@ -221,6 +237,21 @@ namespace IDCard.Reader.Synjones
                 return retCode;
             });
         }
+
+        /// <summary>
+        /// 将wlt文件解码成bmp文件
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="photoFilePath">wlt照片文件路径</param>
+        /// <returns></returns>
+        private static IDCardActionResult GetBmp(int port, string photoFilePath)
+        {
+            return ExecInteropAction(() =>
+            {
+                var communicateType = GetCommunicateType(port);
+                return SynjonesIDCardInterop.GetBmp(photoFilePath, communicateType);
+            });
+        }
         #endregion
 
         #region Interop Read Action
@@ -282,7 +313,9 @@ namespace IDCard.Reader.Synjones
             var txtFilePath = GetFilePath(fileDirectory, DefaultTextFileName);
             var fileBytes = ReadFileContent(txtFilePath);
 
-            throw new NotImplementedException();
+            var cardData = ParseIDCardTextBytes(fileBytes);
+
+            return cardData.FormatCardInfo();
         }
 
         /// <summary>
@@ -290,11 +323,11 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        protected override IDCardActionResult<string> ParsePhotoInfoInternal(string fileDirectory)
+        protected override IDCardActionResult ParsePhotoInfoInternal(string fileDirectory)
         {
             var photoFilePath = GetFilePath(fileDirectory, DefaultPhotoFileName);
 
-            throw new NotImplementedException();
+            return GetBmp(9999, photoFilePath);
         }
         #endregion
 

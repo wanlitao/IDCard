@@ -72,4 +72,16 @@
         /// </summary>
         SpecialName = 4
     }
+
+    /// <summary>
+    /// 身份证阅读器通讯类型（新中新）
+    /// </summary>
+    public enum SynjonesIDCardCommunicateType
+    {
+        /// <summary>
+        /// RS-232C
+        /// </summary>
+        RS232C = 1,
+        USB = 2
+    }
 }

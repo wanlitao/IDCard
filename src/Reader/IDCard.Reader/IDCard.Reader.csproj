@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IDCardDataExtensions.cs" />
     <Compile Include="IDCardReader.cs" />
     <Compile Include="IIDCardReader.cs" />
     <Compile Include="Models\IDCardInfo.cs" />

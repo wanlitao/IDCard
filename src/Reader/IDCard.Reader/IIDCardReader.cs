@@ -40,14 +40,14 @@ namespace IDCard.Reader
         /// 解析照片信息
         /// </summary>        
         /// <returns>BMP照片路径</returns>
-        IDCardActionResult<string> ParsePhotoInfo();
+        IDCardActionResult ParsePhotoInfo();
 
         /// <summary>
         /// 解析照片信息
         /// </summary>
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
-        IDCardActionResult<string> ParsePhotoInfo(string fileDirectory);
+        IDCardActionResult ParsePhotoInfo(string fileDirectory);
         #endregion
 
         #region 读最新地址信息
