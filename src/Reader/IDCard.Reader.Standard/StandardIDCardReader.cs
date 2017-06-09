@@ -19,6 +19,18 @@ namespace IDCard.Reader.Standard
         }
         #endregion
 
+        #region 读最新地址信息
+        /// <summary>
+        /// 读最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">文件输出目录</param>
+        /// <returns></returns>
+        protected override IDCardActionResult ReadNewAddressInfoInternal(string fileDirectory)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region 内容解析
         /// <summary>
         /// 解析文字信息
@@ -39,14 +51,13 @@ namespace IDCard.Reader.Standard
         {
             throw new NotImplementedException();
         }
-        #endregion
 
-        #region 读最新地址信息
         /// <summary>
-        /// 读最新地址信息
+        /// 解析最新地址信息
         /// </summary>
+        /// <param name="fileDirectory">最新地址信息所属目录</param>
         /// <returns></returns>
-        protected override IDCardActionResult<string> ReadNewAddressInfoInternal()
+        protected override string ParseNewAddressInfoInternal(string fileDirectory)
         {
             throw new NotImplementedException();
         }

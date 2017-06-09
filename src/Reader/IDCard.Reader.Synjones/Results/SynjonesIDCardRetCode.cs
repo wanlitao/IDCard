@@ -42,7 +42,16 @@ namespace IDCard.Reader.Synjones
             _retCodeMsgMap.Add(0x41, "读居民身份证操作失败");
             _retCodeMsgMap.Add(0x47, "取随机数失败");
             _retCodeMsgMap.Add(0x60, "SAM_A自检失败，不能接收命令");
-            _retCodeMsgMap.Add(0x66, "SAM_A没经过授权，无法使用");            
+            _retCodeMsgMap.Add(0x66, "SAM_A没经过授权，无法使用");
+
+            //GetBmp错误码
+            _retCodeMsgMap.Add(-1, "相片解码错误");
+            _retCodeMsgMap.Add(-2, "wlt文件后缀错误");
+            _retCodeMsgMap.Add(-3, "wlt文件打开错误");
+            _retCodeMsgMap.Add(-4, "wlt文件格式错误");
+            _retCodeMsgMap.Add(-5, "软件未授权");
+            _retCodeMsgMap.Add(-6, "设备连接错误");
+            _retCodeMsgMap.Add(-7, "调用sdtapi.dll错误");
         }
         #endregion
 

@@ -102,11 +102,11 @@ namespace IDCard.Reader.Synjones
         /// <summary>
         /// 将wlt文件解码成bmp文件
         /// </summary>
+        /// <param name="iPort">端口号</param>
         /// <param name="Wlt_File">wlt文件名</param>
-        /// <param name="intf">阅读设备通讯接口类型（1—RS-232C，2—USB）</param>
         /// <returns></returns>
         [DllImport("SynIDCardAPI.dll", EntryPoint = "Syn_GetBmp", CharSet = CharSet.Ansi)]
-        internal static extern int GetBmp(string Wlt_File, int intf);
+        internal static extern int GetBmp(int iPort, string Wlt_File);
 
         /// <summary>
         /// 读取身份证文字信息和照片信息，并按设置格式格式化

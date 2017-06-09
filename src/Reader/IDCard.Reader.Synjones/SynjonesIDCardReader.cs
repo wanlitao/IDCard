@@ -1,7 +1,6 @@
 ﻿using FCP.Util;
 using System;
 using System.IO;
-using System.Text;
 
 namespace IDCard.Reader.Synjones
 {
@@ -191,8 +190,11 @@ namespace IDCard.Reader.Synjones
                 var retCode = SynjonesIDCardInterop.ReadBaseMsg(port,
                     txtBytes, ref txtByteLen, photoBytes, ref photoByteLen, GetIfOpenCode(ifOpen));
 
-                WriteToFile(txtFilePath, txtBytes, (int)txtByteLen);
-                WriteToFile(photoFilePath, photoBytes, (int)photoByteLen);
+                if (IsRetSuccess(retCode))
+                {
+                    WriteToFile(txtFilePath, txtBytes, (int)txtByteLen);
+                    WriteToFile(photoFilePath, photoBytes, (int)photoByteLen);
+                }                
 
                 return retCode;
             });
@@ -232,7 +234,10 @@ namespace IDCard.Reader.Synjones
                 SynjonesIDCardData idCardData = new SynjonesIDCardData();
                 var retCode = SynjonesIDCardInterop.ReadMsg(port, GetIfOpenCode(ifOpen), ref idCardData);
 
-                WriteToFile(cardDataFilePath, idCardData);
+                if (IsRetSuccess(retCode))
+                {
+                    WriteToFile(cardDataFilePath, idCardData);
+                }
 
                 return retCode;
             });
@@ -246,10 +251,31 @@ namespace IDCard.Reader.Synjones
         /// <returns></returns>
         private static IDCardActionResult GetBmp(int port, string photoFilePath)
         {
+            return ExecInteropAction(() => SynjonesIDCardInterop.GetBmp(port, photoFilePath));
+        }
+
+        /// <summary>
+        /// 读取追加地址信息
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="ifOpen">是否在函数内部打开和关闭端口</param>
+        /// <param name="newAddressFilePath">追加地址信息写入文件路径</param>
+        /// <returns></returns>
+        private static IDCardActionResult ReadNewAppMsg(int port, bool ifOpen, string newAddressFilePath)
+        {
             return ExecInteropAction(() =>
             {
-                var communicateType = GetCommunicateType(port);
-                return SynjonesIDCardInterop.GetBmp(photoFilePath, communicateType);
+                var addressBytes = new byte[70];
+                uint addressByteLen = 0;
+                var retCode = SynjonesIDCardInterop.ReadNewAppMsg(port,
+                    addressBytes, ref addressByteLen, GetIfOpenCode(ifOpen));
+
+                if (IsRetSuccess(retCode))
+                {
+                    WriteToFile(newAddressFilePath, addressBytes, (int)addressByteLen);
+                }
+
+                return retCode;
             });
         }
         #endregion
@@ -302,6 +328,20 @@ namespace IDCard.Reader.Synjones
         }
         #endregion
 
+        #region 读最新地址信息
+        /// <summary>
+        /// 读最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">文件输出目录</param>
+        /// <returns></returns>
+        protected override IDCardActionResult ReadNewAddressInfoInternal(string fileDirectory)
+        {
+            var newAddressFilePath = GetFilePath(fileDirectory, DefaultNewAddressFileName);
+
+            return ExecInteropReadAction((port) => ReadNewAppMsg(port, false, newAddressFilePath));
+        }
+        #endregion
+
         #region 内容解析
         /// <summary>
         /// 解析文字信息
@@ -325,20 +365,26 @@ namespace IDCard.Reader.Synjones
         /// <returns>BMP照片路径</returns>
         protected override IDCardActionResult ParsePhotoInfoInternal(string fileDirectory)
         {
+            var portResult = FindCommunicatePort();
+            if (!portResult.flag)
+                return portResult;
+
             var photoFilePath = GetFilePath(fileDirectory, DefaultPhotoFileName);
 
-            return GetBmp(9999, photoFilePath);
+            return GetBmp(portResult.data, photoFilePath);
         }
-        #endregion
 
-        #region 读最新地址信息
         /// <summary>
-        /// 读最新地址信息
+        /// 解析最新地址信息
         /// </summary>
+        /// <param name="fileDirectory">最新地址信息所属目录</param>
         /// <returns></returns>
-        protected override IDCardActionResult<string> ReadNewAddressInfoInternal()
+        protected override string ParseNewAddressInfoInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            var newAddressFilePath = GetFilePath(fileDirectory, DefaultNewAddressFileName);
+            var fileBytes = ReadFileContent(newAddressFilePath);
+
+            return ParseNewAddressBytes(fileBytes);
         }
         #endregion
     }

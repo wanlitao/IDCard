@@ -30,7 +30,7 @@
         {
             this.btnReadTextPhotoInfo = new System.Windows.Forms.Button();
             this.tbxResultInfo = new System.Windows.Forms.TextBox();
-            this.btnGetBmpPhoto = new System.Windows.Forms.Button();
+            this.btnReadNewAddressInfo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnReadTextPhotoInfo
@@ -52,22 +52,22 @@
             this.tbxResultInfo.Size = new System.Drawing.Size(444, 234);
             this.tbxResultInfo.TabIndex = 1;
             // 
-            // btnGetBmpPhoto
+            // btnReadNewAddressInfo
             // 
-            this.btnGetBmpPhoto.Location = new System.Drawing.Point(122, 12);
-            this.btnGetBmpPhoto.Name = "btnGetBmpPhoto";
-            this.btnGetBmpPhoto.Size = new System.Drawing.Size(86, 23);
-            this.btnGetBmpPhoto.TabIndex = 2;
-            this.btnGetBmpPhoto.Text = "生成Bmp照片";
-            this.btnGetBmpPhoto.UseVisualStyleBackColor = true;
-            this.btnGetBmpPhoto.Click += new System.EventHandler(this.btnGetBmpPhoto_Click);
+            this.btnReadNewAddressInfo.Location = new System.Drawing.Point(122, 12);
+            this.btnReadNewAddressInfo.Name = "btnReadNewAddressInfo";
+            this.btnReadNewAddressInfo.Size = new System.Drawing.Size(104, 23);
+            this.btnReadNewAddressInfo.TabIndex = 2;
+            this.btnReadNewAddressInfo.Text = "读追加地址信息";
+            this.btnReadNewAddressInfo.UseVisualStyleBackColor = true;
+            this.btnReadNewAddressInfo.Click += new System.EventHandler(this.btnReadNewAddressInfo_Click);
             // 
             // SynjonesTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(468, 287);
-            this.Controls.Add(this.btnGetBmpPhoto);
+            this.Controls.Add(this.btnReadNewAddressInfo);
             this.Controls.Add(this.tbxResultInfo);
             this.Controls.Add(this.btnReadTextPhotoInfo);
             this.Name = "SynjonesTestForm";
@@ -81,7 +81,7 @@
 
         private System.Windows.Forms.Button btnReadTextPhotoInfo;
         private System.Windows.Forms.TextBox tbxResultInfo;
-        private System.Windows.Forms.Button btnGetBmpPhoto;
+        private System.Windows.Forms.Button btnReadNewAddressInfo;
     }
 }
 

@@ -23,13 +23,17 @@ namespace IDCard.Reader.Test
             {
                 var cardInfo = idCardReader.ParseTextInfo();
                 TraceDataMessage("身份证信息", cardInfo);
+
+                result = idCardReader.ParsePhotoInfo();
+                TraceResult("生成Bmp照片", result);
             }
         }
 
-        private void btnGetBmpPhoto_Click(object sender, EventArgs e)
+        private void btnReadNewAddressInfo_Click(object sender, EventArgs e)
         {
-            var result = idCardReader.ParsePhotoInfo();
-            TraceResult("生成Bmp照片", result);
+            var result = idCardReader.ReadNewAddressInfo();
+
+            TraceResult("读追加地址", result);
         }
 
         private void TraceResult(string message, IDCardActionResult result)

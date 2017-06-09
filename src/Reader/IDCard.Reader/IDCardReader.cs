@@ -9,6 +9,7 @@ namespace IDCard.Reader
     {
         protected const string DefaultTextFileName = "wz.txt";
         protected const string DefaultPhotoFileName = "xp.wlt";
+        protected const string DefaultNewAddressFileName = "newadd.txt";
 
         protected static string AppDomainBaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -98,18 +99,34 @@ namespace IDCard.Reader
         }
 
         /// <summary>
+        /// 解析最新地址字节
+        /// </summary>
+        /// <param name="newAddressBytes"></param>
+        /// <returns></returns>
+        protected static string ParseNewAddressBytes(byte[] newAddressBytes)
+        {
+            if (newAddressBytes.isEmpty())
+                throw new ArgumentNullException(nameof(newAddressBytes));
+
+            if (newAddressBytes.Length < 70)
+                throw new ArgumentException("invalid new address bytes", nameof(newAddressBytes));
+
+            return ConvertIDCardBytesToUTF8String(newAddressBytes, 0, 70).Trim();
+        }
+
+        /// <summary>
         /// 将身份证文本字节转换为UTF8字符串
         /// </summary>
-        /// <param name="idCardTextBytes"></param>
+        /// <param name="idCardBytes"></param>
         /// <param name="index">起始位置</param>
         /// <param name="count">数量</param>
         /// <returns></returns>
-        protected static string ConvertIDCardBytesToUTF8String(byte[] idCardTextBytes, int index, int count)
+        protected static string ConvertIDCardBytesToUTF8String(byte[] idCardBytes, int index, int count)
         {
-            if (idCardTextBytes.isEmpty())
-                throw new ArgumentNullException(nameof(idCardTextBytes));
+            if (idCardBytes.isEmpty())
+                throw new ArgumentNullException(nameof(idCardBytes));
 
-            byte[] utf8Bytes = Encoding.Convert(Encoding.GetEncoding("UCS-2"), Encoding.UTF8, idCardTextBytes, index, count);
+            byte[] utf8Bytes = Encoding.Convert(Encoding.GetEncoding("UCS-2"), Encoding.UTF8, idCardBytes, index, count);
             return Encoding.UTF8.GetString(utf8Bytes);
         }
         #endregion
@@ -145,6 +162,39 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">文件输出目录</param>
         /// <returns></returns>
         protected abstract IDCardActionResult ReadBaseTextPhotoInfoInternal(string fileDirectory);
+        #endregion
+
+        #region 读最新地址信息
+        /// <summary>
+        /// 读最新地址信息
+        /// </summary>        
+        /// <returns></returns>
+        public IDCardActionResult ReadNewAddressInfo()
+        {
+            return ReadNewAddressInfo(AppDomainBaseDirectory);
+        }
+
+        /// <summary>
+        /// 读最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">文件输出目录</param>
+        /// <returns></returns>
+        public virtual IDCardActionResult ReadNewAddressInfo(string fileDirectory)
+        {
+            if (fileDirectory.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(fileDirectory));
+
+            CheckDisposed();
+
+            return ReadNewAddressInfoInternal(fileDirectory);
+        }
+
+        /// <summary>
+        /// 读最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">文件输出目录</param>
+        /// <returns></returns>
+        protected abstract IDCardActionResult ReadNewAddressInfoInternal(string fileDirectory);
         #endregion
 
         #region 内容解析
@@ -209,25 +259,37 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
         protected abstract IDCardActionResult ParsePhotoInfoInternal(string fileDirectory);
-        #endregion
 
-        #region 读最新地址信息
         /// <summary>
-        /// 读最新地址信息
-        /// </summary>        
+        /// 解析最新地址信息
+        /// </summary>
         /// <returns></returns>
-        public virtual IDCardActionResult<string> ReadNewAddressInfo()
+        public string ParseNewAddressInfo()
         {
-            CheckDisposed();
-
-            return ReadNewAddressInfoInternal();
+            return ParseNewAddressInfo(AppDomainBaseDirectory);
         }
 
         /// <summary>
-        /// 读最新地址信息
+        /// 解析最新地址信息
         /// </summary>
+        /// <param name="fileDirectory">最新地址信息所属目录</param>
         /// <returns></returns>
-        protected abstract IDCardActionResult<string> ReadNewAddressInfoInternal();
+        public virtual string ParseNewAddressInfo(string fileDirectory)
+        {
+            if (fileDirectory.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(fileDirectory));
+
+            CheckDisposed();
+
+            return ParseNewAddressInfoInternal(fileDirectory);
+        }
+
+        /// <summary>
+        /// 解析最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">最新地址信息所属目录</param>
+        /// <returns></returns>
+        protected abstract string ParseNewAddressInfoInternal(string fileDirectory);
         #endregion
 
         #region IDisposable Support

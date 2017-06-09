@@ -22,6 +22,21 @@ namespace IDCard.Reader
         IDCardActionResult ReadBaseTextPhotoInfo(string fileDirectory);
         #endregion
 
+        #region 读最新地址信息
+        /// <summary>
+        /// 读最新地址信息
+        /// </summary>        
+        /// <returns></returns>
+        IDCardActionResult ReadNewAddressInfo();
+
+        /// <summary>
+        /// 读最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">文件输出目录</param>
+        /// <returns></returns>
+        IDCardActionResult ReadNewAddressInfo(string fileDirectory);
+        #endregion
+
         #region 内容解析
         /// <summary>
         /// 解析文字信息
@@ -48,14 +63,19 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
         IDCardActionResult ParsePhotoInfo(string fileDirectory);
-        #endregion
 
-        #region 读最新地址信息
         /// <summary>
-        /// 读最新地址信息
-        /// </summary>        
+        /// 解析最新地址信息
+        /// </summary>
         /// <returns></returns>
-        IDCardActionResult<string> ReadNewAddressInfo();
+        string ParseNewAddressInfo();
+
+        /// <summary>
+        /// 解析最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">最新地址信息所属目录</param>
+        /// <returns></returns>
+        string ParseNewAddressInfo(string fileDirectory);
         #endregion
     }
 }
