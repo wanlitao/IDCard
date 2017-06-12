@@ -15,62 +15,6 @@ namespace IDCard.Reader
 
         #region Helper Functions
         /// <summary>
-        /// 读取文件内容
-        /// </summary>
-        /// <param name="filePath">文件路径</param>
-        /// <returns></returns>
-        protected static byte[] ReadFileContent(string filePath)
-        {
-            if (filePath.isNullOrEmpty())
-                throw new ArgumentNullException(nameof(filePath));
-
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                var fileBytes = new byte[fileStream.Length];
-                fileStream.Read(fileBytes, 0, (int)fileStream.Length);
-
-                return fileBytes;
-            }
-        }
-
-        /// <summary>
-        /// 写入文件
-        /// </summary>
-        /// <param name="filePath">文件路径</param>
-        /// <param name="fileBytes">写入字节</param>
-        /// <param name="byteLength">字节数</param>
-        protected static void WriteToFile(string filePath, byte[] fileBytes, int byteLength)
-        {
-            if (filePath.isNullOrEmpty())
-                throw new ArgumentNullException(nameof(filePath));
-
-            if (fileBytes.isEmpty())
-                throw new ArgumentNullException(nameof(fileBytes));
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                fileStream.Write(fileBytes, 0, byteLength);
-            }
-        }
-
-        /// <summary>
-        /// 获取文件路径
-        /// </summary>
-        /// <param name="directoryPath">目录路径</param>
-        /// <param name="fileName">文件名</param>
-        /// <returns></returns>
-        protected static string GetFilePath(string directoryPath, string fileName)
-        {
-            if (directoryPath.isNullOrEmpty())
-                throw new ArgumentNullException(nameof(directoryPath));
-
-            if (fileName.isNullOrEmpty())
-                throw new ArgumentNullException(nameof(fileName));
-
-            return Path.Combine(directoryPath, fileName);
-        }
-
-        /// <summary>
         /// 解析身份证文本字节
         /// </summary>
         /// <param name="idCardTextBytes"></param>
@@ -198,6 +142,8 @@ namespace IDCard.Reader
         #endregion
 
         #region 内容解析
+
+        #region 解析文字
         /// <summary>
         /// 解析文字信息
         /// </summary>       
@@ -228,7 +174,9 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">文字信息所属目录</param>
         /// <returns></returns>
         protected abstract IDCardInfo ParseTextInfoInternal(string fileDirectory);
+        #endregion
 
+        #region 解析照片
         /// <summary>
         /// 解析照片信息
         /// </summary>        
@@ -259,7 +207,9 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">照片信息所属目录</param>
         /// <returns>BMP照片路径</returns>
         protected abstract IDCardActionResult ParsePhotoInfoInternal(string fileDirectory);
+        #endregion
 
+        #region 解析最新地址
         /// <summary>
         /// 解析最新地址信息
         /// </summary>
@@ -290,6 +240,41 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">最新地址信息所属目录</param>
         /// <returns></returns>
         protected abstract string ParseNewAddressInfoInternal(string fileDirectory);
+        #endregion
+
+        #endregion
+
+        #region 获取照片路径
+        /// <summary>
+        /// 获取Bmp照片路径
+        /// </summary>
+        /// <returns></returns>
+        public string GetBmpPhotoPath()
+        {
+            return GetBmpPhotoPath(AppDomainBaseDirectory);
+        }
+
+        /// <summary>
+        /// 获取Bmp照片路径
+        /// </summary>
+        /// <param name="fileDirectory">照片信息所属目录</param>
+        /// <returns></returns>
+        public virtual string GetBmpPhotoPath(string fileDirectory)
+        {
+            if (fileDirectory.isNullOrEmpty())
+                throw new ArgumentNullException(nameof(fileDirectory));
+
+            CheckDisposed();
+
+            return GetBmpPhotoPathInternal(fileDirectory);
+        }
+
+        /// <summary>
+        /// 获取Bmp照片路径
+        /// </summary>
+        /// <param name="fileDirectory">照片信息所属目录</param>
+        /// <returns></returns>
+        protected abstract string GetBmpPhotoPathInternal(string fileDirectory);
         #endregion
 
         #region IDisposable Support

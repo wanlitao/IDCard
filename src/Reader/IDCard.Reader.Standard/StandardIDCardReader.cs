@@ -62,5 +62,17 @@ namespace IDCard.Reader.Standard
             throw new NotImplementedException();
         }
         #endregion
+
+        #region 获取照片路径
+        /// <summary>
+        /// 获取Bmp照片路径
+        /// </summary>
+        /// <param name="fileDirectory">照片信息所属目录</param>
+        /// <returns></returns>
+        protected override string GetBmpPhotoPathInternal(string fileDirectory)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

@@ -26,6 +26,11 @@ namespace IDCard.Reader.Test
 
                 result = idCardReader.ParsePhotoInfo();
                 TraceResult("生成Bmp照片", result);
+
+                if (result.flag)
+                {
+                    TraceDataMessage("Bmp照片路径", idCardReader.GetBmpPhotoPath());
+                }
             }
         }
 
@@ -54,6 +59,11 @@ namespace IDCard.Reader.Test
         {
             tbxResultInfo.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}：{message}");
             tbxResultInfo.AppendText(Environment.NewLine);
+        }
+
+        private void btnClearLog_Click(object sender, EventArgs e)
+        {
+            tbxResultInfo.Clear();
         }
     }
 }

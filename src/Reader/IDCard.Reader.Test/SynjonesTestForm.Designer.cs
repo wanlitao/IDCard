@@ -31,6 +31,7 @@
             this.btnReadTextPhotoInfo = new System.Windows.Forms.Button();
             this.tbxResultInfo = new System.Windows.Forms.TextBox();
             this.btnReadNewAddressInfo = new System.Windows.Forms.Button();
+            this.btnClearLog = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnReadTextPhotoInfo
@@ -62,11 +63,22 @@
             this.btnReadNewAddressInfo.UseVisualStyleBackColor = true;
             this.btnReadNewAddressInfo.Click += new System.EventHandler(this.btnReadNewAddressInfo_Click);
             // 
+            // btnClearLog
+            // 
+            this.btnClearLog.Location = new System.Drawing.Point(381, 12);
+            this.btnClearLog.Name = "btnClearLog";
+            this.btnClearLog.Size = new System.Drawing.Size(75, 23);
+            this.btnClearLog.TabIndex = 3;
+            this.btnClearLog.Text = "清除日志";
+            this.btnClearLog.UseVisualStyleBackColor = true;
+            this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
+            // 
             // SynjonesTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(468, 287);
+            this.Controls.Add(this.btnClearLog);
             this.Controls.Add(this.btnReadNewAddressInfo);
             this.Controls.Add(this.tbxResultInfo);
             this.Controls.Add(this.btnReadTextPhotoInfo);
@@ -82,6 +94,7 @@
         private System.Windows.Forms.Button btnReadTextPhotoInfo;
         private System.Windows.Forms.TextBox tbxResultInfo;
         private System.Windows.Forms.Button btnReadNewAddressInfo;
+        private System.Windows.Forms.Button btnClearLog;
     }
 }
 

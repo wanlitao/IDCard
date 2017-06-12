@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handler\SynjonesIDCardInteropHandler.cs" />
+    <Compile Include="Handler\SynjonesIDCardInteropReadHandler.cs" />
+    <Compile Include="Interop\SynjonesIDCardInteropAction.cs" />
     <Compile Include="Models\SynjonesIDCardEnums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\SynjonesIDCardActionResult.cs" />
