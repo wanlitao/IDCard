@@ -67,6 +67,8 @@
   <ItemGroup>
     <Compile Include="Exception\IDCardReadException.cs" />
     <Compile Include="Extensions\IDCardDataExtensions.cs" />
+    <Compile Include="Handler\IIDCardInteropHandler.cs" />
+    <Compile Include="Handler\IIDCardInteropReadHandler.cs" />
     <Compile Include="IDCardReader.cs" />
     <Compile Include="IIDCardReader.cs" />
     <Compile Include="Models\IDCardInfo.cs" />

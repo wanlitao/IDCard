@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("IDCard.Reader.Synjones")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Chinese IDCard Reader for SDK provide by Synjones")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("GreatBillows")]
 [assembly: AssemblyProduct("IDCard.Reader.Synjones")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © GreatBillows 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

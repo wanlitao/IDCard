@@ -16,21 +16,28 @@ namespace IDCard.Reader.Test
 
         private void btnReadTextPhotoInfo_Click(object sender, EventArgs e)
         {
-            var result = idCardReader.ReadBaseTextPhotoInfo();
-            TraceResult("读卡", result);
-
-            if (result.flag)
+            try
             {
-                var cardInfo = idCardReader.ParseTextInfo();
-                TraceDataMessage("身份证信息", cardInfo);
-
-                result = idCardReader.ParsePhotoInfo();
-                TraceResult("生成Bmp照片", result);
+                var result = idCardReader.ReadBaseTextPhotoInfo();
+                TraceResult("读卡", result);
 
                 if (result.flag)
                 {
-                    TraceDataMessage("Bmp照片路径", idCardReader.GetBmpPhotoPath());
+                    var cardInfo = idCardReader.ParseTextInfo();
+                    TraceDataMessage("身份证信息", cardInfo);
+
+                    result = idCardReader.ParsePhotoInfo();
+                    TraceResult("生成Bmp照片", result);
+
+                    if (result.flag)
+                    {
+                        TraceDataMessage("Bmp照片路径", idCardReader.GetBmpPhotoPath());
+                    }
                 }
+            }
+            catch(IDCardReadException ex)
+            {
+                TraceException(ex);
             }
         }
 
@@ -53,6 +60,13 @@ namespace IDCard.Reader.Test
             var dataMessage = $"{message}:{SerializerFactory.JsonSerializer.SerializeString(data)}" ;
 
             TraceMessage(dataMessage);
+        }
+
+        private void TraceException(IDCardReadException ex)
+        {
+            var exceptionMessage = $"身份证阅读异常:{ex.Message}，返回码:{ex.ErrorCode}";
+
+            TraceMessage(exceptionMessage);
         }
 
         private void TraceMessage(string message)

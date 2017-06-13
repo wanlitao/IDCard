@@ -5,7 +5,7 @@ namespace IDCard.Reader.Synjones
     /// <summary>
     /// 身份证交互处理程序（新中新）
     /// </summary>
-    internal class SynjonesIDCardInteropHandler
+    internal class SynjonesIDCardInteropHandler : IIDCardInteropHandler
     {
         private int _port = 0;
 
@@ -35,7 +35,7 @@ namespace IDCard.Reader.Synjones
         /// </summary>
         /// <param name="interopAction"></param>
         /// <returns></returns>
-        internal IDCardActionResult ExecIDCardInteropAction(Func<int, IDCardActionResult> interopAction)
+        public IDCardActionResult ExecIDCardInteropAction(Func<int, IDCardActionResult> interopAction)
         {
             if (interopAction == null)
                 throw new ArgumentNullException(nameof(interopAction));

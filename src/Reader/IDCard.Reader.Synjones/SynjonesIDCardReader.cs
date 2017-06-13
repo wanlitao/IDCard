@@ -1,6 +1,4 @@
-﻿using FCP.Util;
-using System;
-using System.IO;
+﻿using System;
 
 namespace IDCard.Reader.Synjones
 {
@@ -45,7 +43,7 @@ namespace IDCard.Reader.Synjones
         /// 获取交互处理程序
         /// </summary>
         /// <returns></returns>
-        private SynjonesIDCardInteropHandler GetInteropHandler()
+        private IIDCardInteropHandler GetInteropHandler()
         {
             return _options.Port.HasValue ? new SynjonesIDCardInteropHandler(_options.Port.Value)
                 : new SynjonesIDCardInteropHandler();
@@ -55,7 +53,7 @@ namespace IDCard.Reader.Synjones
         /// 获取阅读交互处理程序
         /// </summary>
         /// <returns></returns>
-        private SynjonesIDCardInteropReadHandler GetInteropReadHandler()
+        private IIDCardInteropReadHandler GetInteropReadHandler()
         {
             return _options.Port.HasValue ? new SynjonesIDCardInteropReadHandler(_options.Port.Value)
                 : new SynjonesIDCardInteropReadHandler();
