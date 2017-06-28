@@ -70,7 +70,7 @@ namespace IDCard.Reader.Synjones
             var retCode = retPort > 0 ? SuccessRetCode : -99;
 
             return IsRetSuccess(retCode) ? IDCardActionResultHelper.FormatSuccess<SynjonesIDCardActionResult<int>, int>(retCode, retPort)
-                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult<int>>(retCode, "connect reader fail");
+                : IDCardActionResultHelper.FormatFail<SynjonesIDCardActionResult<int>>(retCode, "自动寻找阅读器失败");
         }
 
         /// <summary>

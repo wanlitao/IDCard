@@ -7,6 +7,45 @@ namespace IDCard.Reader.Standard
     /// </summary>
     public class StandardIDCardReader : IDCardReader
     {
+        protected const string DefaultBmpPhotoFileName = "zp.bmp";
+
+        private int? _port;
+
+        #region 构造函数
+        public StandardIDCardReader()
+        { }
+
+        public StandardIDCardReader(int port)
+        {
+            if (port < 1 || port > 9999)
+                throw new ArgumentOutOfRangeException(nameof(port), "port must between 1 and 9999");
+
+            _port = port;
+        }
+        #endregion
+
+        #region Helper Functions
+        /// <summary>
+        /// 获取交互处理程序
+        /// </summary>
+        /// <returns></returns>
+        private IIDCardInteropHandler GetInteropHandler()
+        {
+            return _port.HasValue ? new StandardIDCardInteropHandler(_port.Value)
+                : new StandardIDCardInteropHandler();
+        }
+
+        /// <summary>
+        /// 获取阅读交互处理程序
+        /// </summary>
+        /// <returns></returns>
+        private IIDCardInteropReadHandler GetInteropReadHandler()
+        {
+            return _port.HasValue ? new StandardIDCardInteropReadHandler(_port.Value)
+                : new StandardIDCardInteropReadHandler();
+        }
+        #endregion
+
         #region 读文字和相片信息
         /// <summary>
         /// 读文字和相片信息
@@ -15,7 +54,11 @@ namespace IDCard.Reader.Standard
         /// <returns></returns>        
         protected override IDCardActionResult ReadBaseTextPhotoInfoInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            using (var interopHandler = GetInteropReadHandler())
+            {
+                return interopHandler.ExecIDCardInteropReadAction(
+                    (port) => StandardIDCardInteropAction.ReadContentPath(fileDirectory, (int)StandardIDCardReadActiveType.TextAndWlt));
+            }
         }
         #endregion
 
@@ -27,7 +70,11 @@ namespace IDCard.Reader.Standard
         /// <returns></returns>
         protected override IDCardActionResult ReadNewAddressInfoInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            using (var interopHandler = GetInteropReadHandler())
+            {
+                return interopHandler.ExecIDCardInteropReadAction(
+                    (port) => StandardIDCardInteropAction.ReadContentPath(fileDirectory, (int)StandardIDCardReadActiveType.NewAddress));
+            }
         }
         #endregion
 
@@ -39,7 +86,7 @@ namespace IDCard.Reader.Standard
         /// <returns></returns>
         protected override IDCardInfo ParseTextInfoInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            return ParseTextInfoInternal(fileDirectory, DefaultTextFileName);
         }
 
         /// <summary>
@@ -49,7 +96,10 @@ namespace IDCard.Reader.Standard
         /// <returns>BMP照片路径</returns>
         protected override IDCardActionResult ParsePhotoInfoInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            var photoFilePath = IOHelper.GetFilePath(fileDirectory, DefaultPhotoFileName);
+
+            var interopHandler = GetInteropHandler();
+            return interopHandler.ExecIDCardInteropAction((port) => StandardIDCardInteropAction.GetPhoto(photoFilePath));
         }
 
         /// <summary>
@@ -59,7 +109,7 @@ namespace IDCard.Reader.Standard
         /// <returns></returns>
         protected override string ParseNewAddressInfoInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            return ParseNewAddressInfoInternal(fileDirectory, DefaultNewAddressFileName);
         }
         #endregion
 
@@ -71,7 +121,7 @@ namespace IDCard.Reader.Standard
         /// <returns></returns>
         protected override string GetBmpPhotoPathInternal(string fileDirectory)
         {
-            throw new NotImplementedException();
+            return IOHelper.GetFilePath(fileDirectory, DefaultBmpPhotoFileName);
         }
         #endregion
     }

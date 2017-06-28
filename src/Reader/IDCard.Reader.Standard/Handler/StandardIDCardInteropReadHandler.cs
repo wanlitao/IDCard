@@ -1,26 +1,26 @@
-﻿namespace IDCard.Reader.Synjones
+﻿namespace IDCard.Reader.Standard
 {
     /// <summary>
-    /// 身份证阅读交互处理程序（新中新）
+    /// 身份证阅读交互处理程序（公安部一所）
     /// </summary>
-    internal class SynjonesIDCardInteropReadHandler : IDCardInteropReadHandler, IIDCardInteropReadHandler
+    internal class StandardIDCardInteropReadHandler : IDCardInteropReadHandler, IIDCardInteropReadHandler
     {
         #region 构造函数
-        internal SynjonesIDCardInteropReadHandler()            
+        internal StandardIDCardInteropReadHandler()
         { }
 
-        internal SynjonesIDCardInteropReadHandler(int port)
+        internal StandardIDCardInteropReadHandler(int port)
             : base(port)
         { }
 
         protected override IDCardActionResult<int> AutoFindReaderPort()
         {
-            return SynjonesIDCardInteropAction.FindReader();
+            return StandardIDCardInteropAction.InitCommExt();
         }
 
         protected override IDCardActionResult OpenPort(int port)
         {
-            return SynjonesIDCardInteropAction.OpenPort(port);
+            return StandardIDCardInteropAction.InitComm(port);
         }
         #endregion
 
@@ -31,17 +31,13 @@
         /// <returns></returns>
         protected override IDCardActionResult ExecIDCardInteropReadPreposeAction(int port)
         {
-            var result = SynjonesIDCardInteropAction.StartFindIDCard(port, false);
-            if (!result.flag)
-                return result;
-
-            return SynjonesIDCardInteropAction.SelectIDCard(port, false);
+            return StandardIDCardInteropAction.Authenticate();
         }
 
         #region IDisposable Support
         protected override void DisposeInternal()
         {
-            SynjonesIDCardInteropAction.ClosePort(Port);
+            StandardIDCardInteropAction.CloseComm();
         }
         #endregion
     }

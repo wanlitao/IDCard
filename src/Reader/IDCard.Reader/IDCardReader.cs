@@ -174,6 +174,21 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">文字信息所属目录</param>
         /// <returns></returns>
         protected abstract IDCardInfo ParseTextInfoInternal(string fileDirectory);
+
+        /// <summary>
+        /// 解析文字信息
+        /// </summary>
+        /// <param name="fileDirectory">文字信息所属目录</param>
+        /// <param name="textFileName">文字信息 文件名</param>
+        /// <returns></returns>
+        protected virtual IDCardInfo ParseTextInfoInternal(string fileDirectory, string textFileName)
+        {
+            var txtFilePath = IOHelper.GetFilePath(fileDirectory, textFileName);
+            var fileBytes = IOHelper.ReadFileContent(txtFilePath);
+
+            var cardData = ParseIDCardTextBytes(fileBytes);
+            return cardData.FormatCardInfo();
+        }
         #endregion
 
         #region 解析照片
@@ -240,6 +255,20 @@ namespace IDCard.Reader
         /// <param name="fileDirectory">最新地址信息所属目录</param>
         /// <returns></returns>
         protected abstract string ParseNewAddressInfoInternal(string fileDirectory);
+
+        /// <summary>
+        /// 解析最新地址信息
+        /// </summary>
+        /// <param name="fileDirectory">最新地址信息所属目录</param>
+        /// <param name="newAddressFileName">最新地址信息 文件名</param>
+        /// <returns></returns>
+        protected virtual string ParseNewAddressInfoInternal(string fileDirectory, string newAddressFileName)
+        {
+            var newAddressFilePath = IOHelper.GetFilePath(fileDirectory, newAddressFileName);
+            var fileBytes = IOHelper.ReadFileContent(newAddressFilePath);
+
+            return ParseNewAddressBytes(fileBytes);
+        }
         #endregion
 
         #endregion

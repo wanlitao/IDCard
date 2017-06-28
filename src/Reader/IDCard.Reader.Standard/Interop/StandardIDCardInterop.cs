@@ -42,7 +42,7 @@ namespace IDCard.Reader.Standard
         /// <param name="active">读取信息类型</param>
         /// <returns></returns>
         [DllImport("termb.dll", EntryPoint = "Read_Content")]
-        internal static extern int Read_Content(int active);
+        internal static extern int ReadContent(int active);
 
         /// <summary>
         /// 读卡操作 指定目录
@@ -51,7 +51,7 @@ namespace IDCard.Reader.Standard
         /// <param name="active">读取信息类型</param>
         /// <returns></returns>
         [DllImport("termb.dll", EntryPoint = "Read_Content_Path")]
-        internal static extern int Read_Content_Path(string cPath, int active);
+        internal static extern int ReadContentPath(string cPath, int active);
 
         /// <summary>
         /// 获取BMP照片

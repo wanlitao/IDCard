@@ -6,8 +6,7 @@ namespace IDCard.Reader.Synjones
     /// 身份证阅读（新中新）
     /// </summary>
     public class SynjonesIDCardReader : IDCardReader
-    {
-        protected const string DefaultCardDataFileName = "idcard.txt";
+    {        
         protected const string DefaultBmpPhotoFileName = "xp.bmp";
 
         private SynjonesIDCardReaderOptions _options;
@@ -105,11 +104,7 @@ namespace IDCard.Reader.Synjones
         /// <returns></returns>
         protected override IDCardInfo ParseTextInfoInternal(string fileDirectory)
         {
-            var txtFilePath = IOHelper.GetFilePath(fileDirectory, DefaultTextFileName);
-            var fileBytes = IOHelper.ReadFileContent(txtFilePath);
-
-            var cardData = ParseIDCardTextBytes(fileBytes);
-            return cardData.FormatCardInfo();
+            return ParseTextInfoInternal(fileDirectory, DefaultTextFileName);
         }
 
         /// <summary>
@@ -132,10 +127,7 @@ namespace IDCard.Reader.Synjones
         /// <returns></returns>
         protected override string ParseNewAddressInfoInternal(string fileDirectory)
         {
-            var newAddressFilePath = IOHelper.GetFilePath(fileDirectory, DefaultNewAddressFileName);
-            var fileBytes = IOHelper.ReadFileContent(newAddressFilePath);
-
-            return ParseNewAddressBytes(fileBytes);
+            return ParseNewAddressInfoInternal(fileDirectory, DefaultNewAddressFileName);
         }
         #endregion
 
